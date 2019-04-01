@@ -2,6 +2,7 @@ $(document).ready(function () {
 
      // 切换左侧导航栏</>图标
     var $menuSiderbar = $(".menu-sidebar-head a")
+    
     $menuSiderbar.click(function () {
         $(this).children().toggleClass("glyphicon-menu-down glyphicon-menu-right");
         $(this).addClass('sider-active');
