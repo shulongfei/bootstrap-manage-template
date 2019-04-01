@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="assets/plugins/bootstrap-3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/list.css">
+</head>
+<body>
+<div class="container">
+    <div class="page-header text-center">
+        <h2 class="text-primary"><em>user manage</em></h2>
+    </div>
+    <div class="btn-group">
+        <button class="btn btn-success glyphicon glyphicon-plus" data-toggle="modal"
+                data-target="#addDiv">新增用户
+        </button>
+        <button class="btn btn-danger glyphicon glyphicon-trash" id="multiDeleteBtn"
+                type="button" data-container="body" data-content="请至少选择一个"
+                data-toggle="popover" data-placement="right" data-trigger="manual">批量删除
+        </button>
+    </div>
+    <div class="btn-group pull-right">
+        <button class="btn btn-primary glyphicon glyphicon-th" data-toggle="dropdown" title="列">
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" id="dropdownMenu1">
+            <!--<li>
+                <label>
+                    <input type="checkbox" checked="checked">ID
+                </label>
+            </li>-->
+        </ul>
+        <button class="btn btn-warning glyphicon glyphicon-refresh" id="refreshBtn" title="刷新"></button>
+    </div>
+    <div class="alert alert-danger alert-dismissible fade in text-center"
+         id="deleteConfirm" style="display: none">
+        <button type="button" class="close">
+            <span class="glyphicon glyphicon-remove"></span>
+        </button>
+        <h4>确认删除？</h4>
+        <p>
+            <button type="button" class="btn btn-danger confirm">确定</button>
+            <button type="button" class="btn btn-default">取消</button>
+        </p>
+    </div>
+    <div class="modal fade" id="addDiv">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                    <h4 class="text-center">add user</h4>
+                </div>
+                <form action="#" method="post">
+                    <div class="modal-body form-group">
+                        <label for="usernameInput">username</label>
+                        <input type="text" id="usernameInput" name="username">
+                    </div>
+                    <div class="modal-body form-group">
+                        <label for="passwordInput">password</label>
+                        <input type="password" id="passwordInput" name="password">
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" data-dismiss="modal">
+                            summit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive" id="tableBlock">
+        <table class="table table-striped table-hover table-condensed">
+            <thead>
+            <tr>
+                <th></th>
+                <th><input type="checkbox" title="全选" id="selectAllCheckBox"/></th>
+                <th>ID</th>
+                <th>username</th>
+                <th>password</th>
+                <th>sex</th>
+                <th>age</th>
+                <th>options</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="text-center">
+                    <span class="detail glyphicon glyphicon-plus" title="详情"></span>
+                </td>
+                <td><input type="checkbox" class="single-checkbox" title="select"></td>
+                <td>1</td>
+                <td>u1</td>
+                <td>p1</td>
+                <td>male</td>
+                <td>18</td>
+                <td>
+                    <a href="#" class="btn btn-primary glyphicon glyphicon-pencil" data-toggle="modal"
+                       data-target="#editDiv" title="编辑"></a>
+                    <a href="#" class="btn btn-danger glyphicon glyphicon-trash btn-single-delete" title="删除"></a>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-center">
+                    <span class="detail glyphicon glyphicon-plus" title="详情"></span>
+                </td>
+                <td><input type="checkbox" class="single-checkbox" title="select"></td>
+                <td>1</td>
+                <td>u1</td>
+                <td>p1</td>
+                <td>male</td>
+                <td>18</td>
+                <td>
+                    <a href="#" class="btn btn-primary glyphicon glyphicon-pencil" data-toggle="modal"
+                       data-target="#editDiv" title="编辑"></a>
+                    <a href="#" class="btn btn-danger glyphicon glyphicon-trash btn-single-delete" title="删除"></a>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-center">
+                    <span class="detail glyphicon glyphicon-plus" title="详情"></span>
+                </td>
+                <td><input type="checkbox" class="single-checkbox" title="select"></td>
+                <td>1</td>
+                <td>u1</td>
+                <td>p1</td>
+                <td>male</td>
+                <td>18</td>
+                <td>
+                    <a href="#" class="btn btn-primary glyphicon glyphicon-pencil" data-toggle="modal"
+                       data-target="#editDiv" title="编辑"></a>
+                    <a href="#" class="btn btn-danger glyphicon glyphicon-trash btn-single-delete" title="删除"></a>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-center">
+                    <span class="detail glyphicon glyphicon-plus" title="详情"></span>
+                </td>
+                <td><input type="checkbox" class="single-checkbox" title="select"></td>
+                <td>1</td>
+                <td>u1</td>
+                <td>p1</td>
+                <td>male</td>
+                <td>18</td>
+                <td>
+                    <a href="#" class="btn btn-primary glyphicon glyphicon-pencil" data-toggle="modal"
+                       data-target="#editDiv" title="编辑"></a>
+                    <a href="#" class="btn btn-danger glyphicon glyphicon-trash btn-single-delete" title="删除"></a>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-center">
+                    <span class="detail glyphicon glyphicon-plus" title="详情"></span>
+                </td>
+                <td><input type="checkbox" class="single-checkbox" title="select"></td>
+                <td>1</td>
+                <td>u1</td>
+                <td>p1</td>
+                <td>male</td>
+                <td>18</td>
+                <td>
+                    <a href="#" class="btn btn-primary glyphicon glyphicon-pencil" data-toggle="modal"
+                       data-target="#editDiv" title="编辑"></a>
+                    <a href="#" class="btn btn-danger glyphicon glyphicon-trash btn-single-delete" title="删除"></a>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-center">
+                    <span class="detail glyphicon glyphicon-plus" title="详情"></span>
+                </td>
+                <td><input type="checkbox" class="single-checkbox" title="select"></td>
+                <td>1</td>
+                <td>u1</td>
+                <td>p1</td>
+                <td>male</td>
+                <td>18</td>
+                <td>
+                    <a href="#" class="btn btn-primary glyphicon glyphicon-pencil" data-toggle="modal"
+                       data-target="#editDiv" title="编辑"></a>
+                    <a href="#" class="btn btn-danger glyphicon glyphicon-trash btn-single-delete" title="删除"></a>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-center">
+                    <span class="detail glyphicon glyphicon-plus" title="详情"></span>
+                </td>
+                <td><input type="checkbox" class="single-checkbox" title="select"></td>
+                <td>1</td>
+                <td>u1</td>
+                <td>p1</td>
+                <td>male</td>
+                <td>18</td>
+                <td>
+                    <a href="#" class="btn btn-primary glyphicon glyphicon-pencil" data-toggle="modal"
+                       data-target="#editDiv" title="编辑"></a>
+                    <a href="#" class="btn btn-danger glyphicon glyphicon-trash btn-single-delete" title="删除"></a>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-center">
+                    <span class="detail glyphicon glyphicon-plus" title="详情"></span>
+                </td>
+                <td><input type="checkbox" class="single-checkbox" title="select"></td>
+                <td>1</td>
+                <td>u1</td>
+                <td>p1</td>
+                <td>male</td>
+                <td>18</td>
+                <td>
+                    <a href="#" class="btn btn-primary glyphicon glyphicon-pencil" data-toggle="modal"
+                       data-target="#editDiv" title="编辑"></a>
+                    <a href="#" class="btn btn-danger glyphicon glyphicon-trash btn-single-delete" title="删除"></a>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-center">
+                    <span class="detail glyphicon glyphicon-plus" title="详情"></span>
+                </td>
+                <td><input type="checkbox" class="single-checkbox" title="select"></td>
+                <td>1</td>
+                <td>u1</td>
+                <td>p1</td>
+                <td>male</td>
+                <td>18</td>
+                <td>
+                    <a href="#" class="btn btn-primary glyphicon glyphicon-pencil" data-toggle="modal"
+                       data-target="#editDiv" title="编辑"></a>
+                    <a href="#" class="btn btn-danger glyphicon glyphicon-trash btn-single-delete" title="删除"></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <nav class="text-center">
+        <ul class="pagination">
+            <li class="previous"><a href="#"><span>&laquo;</span></a></li>
+            <li class="active number"><a href="#">1</a></li>
+            <li class="number"><a href="#">2</a></li>
+            <li class="number"><a href="#">3</a></li>
+            <li class="number"><a href="#">4</a></li>
+            <li class="number"><a href="#">5</a></li>
+            <li class="number"><a href="#">6</a></li>
+            <li class="next"><a href="#"><span>&raquo;</span></a></li>
+        </ul>
+    </nav>
+</div>
+<div class="modal fade" id="editDiv">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+                <h4 class="text-center">edit user</h4>
+            </div>
+            <form action="#" method="post">
+                <div class="modal-body form-group">
+                    <label for="usernameEditInput">username</label>
+                    <input type="text" id="usernameEditInput" name="username">
+                </div>
+                <div class="modal-body form-group">
+                    <label for="passwordEditInput">password</label>
+                    <input type="password" id="passwordEditInput" name="password">
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-dismiss="modal">
+                        summit
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="assets/plugins/jquery-3.2.1/jquery-3.2.1.min.js"></script>
+<script src="assets/plugins/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script src="assets/js/list.js"></script>
+</body>
+</html>
