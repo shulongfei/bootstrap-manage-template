@@ -9,6 +9,12 @@ if (typeof jQuery === 'undefined') {
   throw new Error('system requires jQuery')
 }
 
+// 自定义路由(根据实际情况定义 ---单独定义外部文件导入)
+var router = [
+  {path: '', name: '', children: {}}
+]
+
+
 /* Layout
  *页面结构初始化
  */
@@ -17,20 +23,35 @@ $(document).ready(function(){
   var Selector = {
     wrapper       : '.wrapper',
     contentWrapper: '.content-wrapper',
-    mainFooter    : '.main-footer',
-    mainHeader    : '.main-header',
-    sidebar       : '.sidebar',
-    content       : '.content',
-    iframe        : '.main-iframe'
+    iframe        : '.main-iframe',
   };
-  $('body').removeClass('hold-transition');
-  // 初始化页面加载
-  var current_url = window.location.href.split('#')[1];
-  if(current_url) {
-    $(Selector.iframe).attr('src', current_url);
-  } else {
-    $(Selector.iframe).attr('src', 'form.html');
+
+  var ClassName = {
+    open          : 'menu-open'
+  };
+
+  demoManageInit();
+
+  // 初始化页面加载(路由，iframe，菜单动态加载)
+  function demoManageInit() {
+    $('body').removeClass('hold-transition');
+    var current_url = window.location.href.split('#')[1];
+    var activeDom = $('a[href="#'+current_url+'"]');
+    var defaultDom = $('a[href="#form.html"]');
+    if(current_url) {
+      $(Selector.iframe).attr('src', current_url); 
+      activeDom.parent('li').addClass('active');
+      activeDom.parents('.treeview').addClass('active');
+    } else {
+      $(Selector.iframe).attr('src', 'form.html');
+      defaultDom.parent('li').addClass('active');
+      defaultDom.parents('.treeview').addClass('active');
+    } 
+
+    console.log($(Selector.iframe).attr('src'));
+
   }
+
 });
 
 
@@ -76,7 +97,7 @@ $(document).ready(function(){
     } else {
       closeMenu();
     }
-  }
+  };
 
   function closeMenu() {
     var windowWidth = $(window).width();
@@ -110,9 +131,11 @@ $(document).ready(function(){
     animationSpeed: 500,
     accordion     : true,
     followLink    : false,
-    trigger       : '.treeview a'
+    clickAcitve   : true,
+    trigger       : '.treeview a',
+    triggerSingle : '.treeview-single a'
   };
-  
+
   var Selector = {
     tree        : '.tree',
     treeview    : '.treeview',
@@ -121,40 +144,67 @@ $(document).ready(function(){
     data        : '[data-widget="tree"]',
     active      : '.active',
     iframe      : '.main-iframe'
+
   };
 
   var ClassName = {
     open: 'menu-open',
-    tree: 'tree'
+    tree: 'tree',
+    treeview: 'treeview',
+    active: 'active'
+
   };
 
   $(Selector.data).each(function () {
     $(this).addClass(ClassName.tree);
-    $(Selector.treeview + Selector.active, $(this)).addClass(ClassName.open);
+    $(Selector.treeview + Selector.active).addClass(ClassName.open);
+
     $(this).on('click', Default.trigger, function (event) {
-      var href = $(this).attr("href");
-      if( href!== '#') {
-       $(Selector.iframe).attr('src', href.slice(1))
-      } 
       toggle($(this), event)
     });
+
+    // 为了不影响已有结构，单独添加一级菜单点击事件(不阻止默认事件)。
+    $(this).on('click', Default.triggerSingle, function() {
+      singleMenu($(this));
+    })
+
   });
 
   function toggle(link, event) {
     var treeviewMenu = link.next(Selector.treeviewMenu);
     var parentLi     = link.parent();
+    var siblingLi    = parentLi.parents('.treeview').siblings('.treeview').find('.treeview-menu li');
     var isOpen       = parentLi.hasClass(ClassName.open);
-    if (!parentLi.is(Selector.treeview)) {
-      return;
+    var isTreeview   = parentLi.hasClass(ClassName.treeview);
+    var href = link.attr("href").slice(1);
+
+    if(href) {
+      $(Selector.iframe).attr('src', href);
+    } 
+    if(!isTreeview) {
+      parentLi.addClass('active').siblings().removeClass('active');
+      siblingLi.removeClass('active');
     }
+
+    // if (!parentLi.is(Selector.treeview)) {
+    //   return;
+    // }
+
     if (!Default.followLink || link.attr('href') === '#') {
       event.preventDefault();
     }
+
+    if(Default.clickAcitve) {
+      $(Selector.open).removeClass(ClassName.active);
+      Default.clickAcitve = false;
+    }
+   
     if (isOpen) {
       collapse(treeviewMenu, parentLi);
     } else {
       expand(treeviewMenu, parentLi);
     }
+
   };
 
   function expand(tree, parent) {
@@ -165,12 +215,25 @@ $(document).ready(function(){
     }
     parent.addClass(ClassName.open);
     tree.slideDown(Default.animationSpeed);
-  }
+  };
 
   function collapse(tree, parentLi) {
     var collapsedEvent = $.Event(Event.collapsed);
     parentLi.removeClass(ClassName.open);
     tree.slideUp(Default.animationSpeed);
   };
+
+  function singleMenu(link) {
+    var treeviewMenu = link.next(Selector.treeviewMenu);
+    var parentLi     = link.parent();
+    var siblingLi    = parentLi.siblings('.treeview').find('.treeview-menu li');
+    var href = link.attr("href").slice(1);
+    if(href) {
+      $(Selector.iframe).attr('src', href);
+    } 
+    expand(treeviewMenu, parentLi);
+    siblingLi.removeClass('active');
+
+  }
 
 })
