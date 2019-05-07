@@ -4,7 +4,6 @@
 * 日期: 2019-4-29
 * 作用：对2017年的项目中的例子做一个总结
 */
-
 if (typeof jQuery === 'undefined') {
   throw new Error('system requires jQuery')
 }
@@ -13,7 +12,6 @@ if (typeof jQuery === 'undefined') {
 var router = [
   {path: '', name: '', children: {}}
 ]
-
 
 /* Layout
  *页面结构初始化
@@ -31,7 +29,6 @@ $(document).ready(function(){
   };
 
   demoManageInit();
-
   // 初始化页面加载(路由，iframe，菜单动态加载)
   function demoManageInit() {
     $('body').removeClass('hold-transition');
@@ -47,18 +44,12 @@ $(document).ready(function(){
       defaultDom.parent('li').addClass('active');
       defaultDom.parents('.treeview').addClass('active');
     } 
-
-    console.log($(Selector.iframe).attr('src'));
-
   }
-
 });
-
 
 
 /* pushmenu 
  * 左侧菜单伸展与收缩
- *
  */
 $(document).ready(function(){
   'use strict';
@@ -121,7 +112,7 @@ $(document).ready(function(){
 });
 
 
-/* Tree
+/* Tree()
  * 菜单树
  */
 $(document).ready(function(){
@@ -185,26 +176,21 @@ $(document).ready(function(){
       parentLi.addClass('active').siblings().removeClass('active');
       siblingLi.removeClass('active');
     }
-
-    // if (!parentLi.is(Selector.treeview)) {
-    //   return;
-    // }
-
+    if (!parentLi.is(Selector.treeview)) {
+      return;
+    }
     if (!Default.followLink || link.attr('href') === '#') {
       event.preventDefault();
     }
-
     if(Default.clickAcitve) {
       $(Selector.open).removeClass(ClassName.active);
       Default.clickAcitve = false;
     }
-   
     if (isOpen) {
       collapse(treeviewMenu, parentLi);
     } else {
       expand(treeviewMenu, parentLi);
     }
-
   };
 
   function expand(tree, parent) {
@@ -233,7 +219,142 @@ $(document).ready(function(){
     } 
     expand(treeviewMenu, parentLi);
     siblingLi.removeClass('active');
+  }
+})
 
+
+/* DirectChat()
+ * ===该模块代码未做更改(直接重adminlte文件中提取出来使用)===
+ * @Usage: $('#my-chat-box').directChat()
+ *         or add [data-widget="direct-chat"] to the trigger
+ */
++function ($) {
+  'use strict';
+
+  var DataKey = 'lte.controlsidebar';
+
+  var Default = {
+    slide: true
+  };
+
+  var Selector = {
+    sidebar: '.control-sidebar',
+    data   : '[data-toggle="control-sidebar"]',
+    open   : '.control-sidebar-open',
+    bg     : '.control-sidebar-bg',
+    wrapper: '.wrapper',
+    content: '.content-wrapper',
+    boxed  : '.layout-boxed'
+  };
+
+  var ClassName = {
+    open : 'control-sidebar-open',
+    fixed: 'fixed'
+  };
+
+  var Event = {
+    collapsed: 'collapsed.controlsidebar',
+    expanded : 'expanded.controlsidebar'
+  };
+
+  // ControlSidebar Class Definition
+  // ===============================
+  var ControlSidebar = function (element, options) {
+    this.element         = element;
+    this.options         = options;
+    this.hasBindedResize = false;
+
+    this.init();
+  };
+
+  ControlSidebar.prototype.init = function () {
+    // Add click listener if the element hasn't been
+    // initialized using the data API
+    if (!$(this.element).is(Selector.data)) {
+      $(this).on('click', this.toggle);
+    }
+
+    this.fix();
+    $(window).resize(function () {
+      this.fix();
+    }.bind(this));
+  };
+
+  ControlSidebar.prototype.toggle = function (event) {
+    if (event) event.preventDefault();
+
+    this.fix();
+
+    if (!$(Selector.sidebar).is(Selector.open) && !$('body').is(Selector.open)) {
+      this.expand();
+    } else {
+      this.collapse();
+    }
+  };
+
+  ControlSidebar.prototype.expand = function () {
+    if (!this.options.slide) {
+      $('body').addClass(ClassName.open);
+    } else {
+      $(Selector.sidebar).addClass(ClassName.open);
+    }
+
+    $(this.element).trigger($.Event(Event.expanded));
+  };
+
+  ControlSidebar.prototype.collapse = function () {
+    $('body, ' + Selector.sidebar).removeClass(ClassName.open);
+    $(this.element).trigger($.Event(Event.collapsed));
+  };
+
+  ControlSidebar.prototype.fix = function () {
+    if ($('body').is(Selector.boxed)) {
+      this._fixForBoxed($(Selector.bg));
+    }
+  };
+
+  // Private
+  ControlSidebar.prototype._fixForBoxed = function (bg) {
+    bg.css({
+      position: 'absolute',
+      height  : $(Selector.wrapper).height()
+    });
+  };
+
+  // Plugin Definition
+  // =================
+  function Plugin(option) {
+    return this.each(function () {
+      var $this = $(this);
+      var data  = $this.data(DataKey);
+
+      if (!data) {
+        var options = $.extend({}, Default, $this.data(), typeof option == 'object' && option);
+        $this.data(DataKey, (data = new ControlSidebar($this, options)));
+      }
+
+      if (typeof option == 'string') data.toggle();
+    });
   }
 
-})
+  var old = $.fn.controlSidebar;
+
+  $.fn.controlSidebar             = Plugin;
+  $.fn.controlSidebar.Constructor = ControlSidebar;
+
+  // No Conflict Mode
+  // ================
+  $.fn.controlSidebar.noConflict = function () {
+    $.fn.controlSidebar = old;
+    return this;
+  };
+
+  // ControlSidebar Data API
+  // =======================
+  $(document).on('click', Selector.data, function (event) {
+    if (event) event.preventDefault();
+    Plugin.call($(this), 'toggle');
+  });
+
+}(jQuery);
+
